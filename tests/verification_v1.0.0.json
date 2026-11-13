@@ -1,0 +1,31 @@
+{
+  "passed": true,
+  "version": "1.0.0",
+  "source_and_exe_inference_pixels_exact": true,
+  "real_raw_derived_input_shape": [
+    640,
+    640
+  ],
+  "output_shape": [
+    1280,
+    1280,
+    3
+  ],
+  "model_sha256": "43fd0e4566d39540c3e3912fda24f0e53bb7b509c2e9d18f8e01b4b94324ab22",
+  "exe_sha256": "6de213ffcb1e60e9a0f84442ff49db0497ea2d193a6d0079842ef70a4c914e4c",
+  "exe_bytes": 157291939,
+  "original_model_embedded": true,
+  "no_external_python_path": true,
+  "all_four_cfa_phases": true,
+  "cancel_cleanup": true,
+  "no_overwrite": true,
+  "dng_metadata_matches": true,
+  "dng_readback": "ALL_PIXELS_EXACT",
+  "float_tiff_exact": "ALL_PIXELS_EXACT",
+  "negative_dng_preserved": true,
+  "readme_original_sha256": "d2686171405fff15a362244c3ce4df746477e7eadedbbc67ab31874870807254",
+  "packaged_gui_raw_import_and_inference": true,
+  "packaged_gui_images_http_200": true,
+  "exclusive_port_isolation": true,
+  "compiled_ui_version": "1.0.0"
+}

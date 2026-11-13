@@ -1,0 +1,4 @@
+*.onnx binary
+*.zip binary
+*.py text eol=lf
+*.html text eol=lf

@@ -1,0 +1,47 @@
+Sony ExRAW Studio 1.0.0 — Windows x64
+
+Executable
+Double-click SonyExRAWStudio-v1.0.0-Windows-x64.exe. No Python installation or model
+download is required: the original v3.48 ONNX weights are inside the executable.
+The interface opens in your default browser and processes images only on localhost.
+One-file extraction uses the current working directory and is removed on normal exit.
+Place the EXE in a writable folder. Data is stored in SonyExRAW_Data next to the EXE.
+An existing instance of this installation is reused. The default localhost port is
+52348; the next available port up to 52357 is used when necessary.
+
+Workflow
+1. Add one or more Bayer RAW files using the native file chooser or full file paths.
+2. Choose the PTC noise calibration. S5 ISO100 is the supplied explicit prior;
+   S5II uses an approximation. Use matching manual parameters for other cameras/ISOs.
+3. Test a detail region and compare AHD + interpolation with Sony at common exposure.
+4. Export the selected image or all queued images. Width and height each increase 2x.
+5. Use Results to locate saved files. Stop Queue cancels after the active tile.
+6. Use Exit in the footer to stop the local service after tasks finish, or leave
+   it to exit automatically after four hours without page access or work.
+
+Formats
+- DNG: 16-bit linear three-channel camera RGB, NOT a Bayer mosaic. Camera WB and
+  matrix remain metadata; display gamma is not baked in. Negative values are
+  represented below a black pedestal. DefaultCrop follows each source file.
+- TIFF: 32-bit floating-point linear camera RGB, including negative/highlight values.
+  It is not display sRGB. A normal image viewer may render it dark or differently.
+- Each export has a JSON sidecar with file/model identity, calibration and checks.
+  Existing images are never overwritten. Large temporary buffers are reclaimed.
+
+Support
+CPU inference, four threads. Ordinary 2x2 Bayer with valid camera WB/matrix;
+no X-Trans, monochrome or demosaiced RGB input. Per-file LibRaw black/white levels
+are read, not camera constants. Display uses a single-matrix preview, not Adobe looks.
+
+Source
+Install requirements.txt in Python 3.10 x64 and run: python -B main.py
+The model is already in models/. No local machine-specific JSR or PTC paths are used.
+Set SONY_EXRAW_HOME to place writable application data elsewhere.
+Optional SONY_EXRAW_ALLOWED_DRIVES=E,F restricts output drives, including junctions.
+
+Build
+Install PyInstaller 6.21.0 alongside requirements, then run:
+  python -B tools/build_release.py
+The spec embeds models/exraw_hires_v3.48.onnx, UI, calibration and dependency notices.
+Run the compiled executable with --self-test <writable-folder> to verify the embedded
+model, real inference, DNG/float TIFF writing, metadata/readback and cancellation.

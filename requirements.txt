@@ -1,0 +1,7 @@
+numpy==2.2.6
+rawpy==0.27.0
+opencv-python-headless==5.0.0.93
+tifffile==2025.5.10
+Pillow==12.3.0
+onnx==1.17.0
+onnxruntime==1.23.2

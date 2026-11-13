@@ -1,0 +1,26 @@
+{
+  "record": {
+    "id": 1874,
+    "sensor_id": "1362",
+    "brand": "Panasonic",
+    "model": "Lumix DCS5",
+    "iso_nominal": 100.0,
+    "sensor_format": "Full Frame",
+    "mode": "poisson_gaussian_prnu",
+    "alpha": 1.0642183098039217e-05,
+    "beta_total": 5.2461222037677816e-09,
+    "c": 8.474196739e-06,
+    "original_c": 8.474196739e-06,
+    "tiny_negative_c_clamped": false,
+    "clamp_max_relative_variance_change": 0.0,
+    "cross_check_flag": null,
+    "calibration_known": true,
+    "endpoint_points_not_used_by_exact_model": 0,
+    "sigma_18": 0.0014816945842992164,
+    "source": "ptc/Panasonic_Lumix_DCS5.csv",
+    "points": 256,
+    "fit_max_res_db": 5.093e-11
+  },
+  "bank_sha256": "ab4c70ff9d4f2d5e33ac67299210fece729e9aeb5e0271098f0a531389dd743a",
+  "note": "S5 ISO100 scalar prior; S5II uses a proxy. Not per-file measured calibration."
+}

@@ -1,0 +1,17 @@
+Bundled model: Sony ExRAW Hi-Res v3.48
+File: models/exraw_hires_v3.48.onnx
+SHA256: 43fd0e4566d39540c3e3912fda24f0e53bb7b509c2e9d18f8e01b4b94324ab22
+Size: 69,077,184 bytes
+
+The original model file is included unchanged in the repository and Windows executable.
+The model file has two trailing zero bytes, which are removed only from the in-memory
+buffer before loading with ONNX. The on-disk weights are not rewritten.
+
+The network receives four spatial Bayer signal phases followed by four standard
+deviation phases. The fixed signal scale is (native code - per-phase black) / 16384.
+PTC alpha, beta_total and c are expressed in fullwell-normalized units; beta_total
+already includes quantization variance. Input negative signal values are preserved.
+
+This application does not fine-tune or relicense Sony's model. It uses explicit
+cross-camera calibration assumptions and is not a claim of decoder equivalence
+with Sony's original application. See the existing repository README and extraction tool.
