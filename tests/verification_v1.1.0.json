@@ -1,0 +1,56 @@
+{
+  "passed": true,
+  "version": "1.1.0",
+  "strict_wgpu": true,
+  "cpu_fallback": false,
+  "excluded_packaged_cpu_modules": [
+    "onnxruntime",
+    "torch",
+    "tensorflow"
+  ],
+  "model_original_sha256": "43fd0e4566d39540c3e3912fda24f0e53bb7b509c2e9d18f8e01b4b94324ab22",
+  "exe_sha256": "647772ed194d5c9d5ff3f82feda27cb809a92bba7faf3e231ad81707b00f1aab",
+  "exe_bytes": 154297067,
+  "adapter": {
+    "vendor": "NVIDIA",
+    "architecture": "",
+    "device": "NVIDIA GeForce RTX 3090 Ti",
+    "description": "610.88",
+    "stackgroup_min_size": 4,
+    "stackgroup_max_size": 128,
+    "vendor_id": 4318,
+    "device_id": 8707,
+    "adapter_type": "DiscreteGPU",
+    "backend_type": "Vulkan"
+  },
+  "precision": "FP32",
+  "graph_gpu_ops": {
+    "Conv": 53,
+    "Relu": 24,
+    "Add": 28,
+    "ConvTranspose": 5
+  },
+  "weighted_gpu_operations": 58,
+  "reference_layer_count": 110,
+  "reference_layers_max_abs": 2.6226043701171875e-06,
+  "tile512_reference_max_abs": 3.8743019104003906e-07,
+  "tile512_reference_rmse": 3.864383657514736e-08,
+  "fullframe_output_shape": [
+    8016,
+    12016,
+    3
+  ],
+  "fullframe_total_seconds": 51.54221749998396,
+  "fullframe_source_cfa": "RGGB",
+  "fullframe_code_readback": "ALL_PIXELS_EXACT",
+  "fullframe_float_parity_max_abs": 1.525902189675188e-05,
+  "fullframe_float_parity_rmse": 5.5275373258084e-07,
+  "fullframe_parity_tolerance": 1.825902189669642e-05,
+  "hardware_adapter_required": true,
+  "software_adapter_rejected": true,
+  "cancel_cleanup": true,
+  "no_overwrite": true,
+  "per_tile_final_readback_only": true,
+  "gpu_owned_buffer_peak_bytes": 1761607680,
+  "readme_blob_unchanged": "c83c2fe7eef5d0af1b1404bd6e745af1f3f8d090"
+}

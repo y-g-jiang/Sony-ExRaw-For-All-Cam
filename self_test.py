@@ -35,6 +35,7 @@ def run(folder,source=None):
         events[-1].update(completed=n,total=total)
     target=root/'inference.dng'
     result=engine.process(source,dict(profile='s5',format='dng',gain=1),root/'scratch',target,'export',progress,cancel)
+    assert result['provider']=='WGPU' and result['backend']['strict'] and not result['backend']['cpu_fallback']
     assert result['export']['pixel_readback']=='ALL_PIXELS_EXACT'
     with tifffile.TiffFile(target) as f:
         tags=f.pages[0].tags
@@ -63,7 +64,9 @@ def run(folder,source=None):
     except ValueError:pass
     else:raise AssertionError('Existing output was overwritten')
     model_sha=engine.sha(engine.MODEL);assert model_sha==engine.MODEL_SHA
+    assert not any(name in sys.modules for name in ('onnxruntime','torch','tensorflow'))
     report=dict(passed=True,version=VERSION,frozen=bool(getattr(sys,'frozen',False)),
+        strict_wgpu=True,cpu_fallback_imports=[],backend=engine.backend_info(),
         model_embedded_path=str(engine.MODEL),model_sha256=model_sha,bundle=str(BUNDLE),
         all_four_cfa_phases=True,cancel_cleanup=True,no_overwrite=True,dng_metadata_matches=True,
         inference=result,negative_dng=dng,float_tiff=tiff,events=events,seconds=time.perf_counter()-started)

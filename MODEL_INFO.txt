@@ -15,3 +15,7 @@ already includes quantization variance. Input negative signal values are preserv
 This application does not fine-tune or relicense Sony's model. It uses explicit
 cross-camera calibration assumptions and is not a claim of decoder equivalence
 with Sony's original application. See the existing repository README and extraction tool.
+
+Execution in v1.1.0: strict WGPU on a hardware adapter, FP32 WGSL. ONNX is a
+read-only model parser. No ONNX Runtime, PyTorch, CUDA or CPU neural evaluator
+is used or shipped. CPU/software WGPU adapters are rejected.

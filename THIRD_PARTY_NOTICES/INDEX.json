@@ -49,13 +49,6 @@
     ]
   },
   {
-    "package": "onnxruntime",
-    "version": "1.23.2",
-    "notices": [
-      "onnxruntime\\onnxruntime\\LICENSE"
-    ]
-  },
-  {
     "package": "protobuf",
     "version": "5.29.5",
     "notices": [
@@ -117,6 +110,27 @@
     "version": "2026.7",
     "notices": [
       "pyinstaller-hooks-contrib\\pyinstaller_hooks_contrib-2026.7.dist-info\\licenses\\LICENSE"
+    ]
+  },
+  {
+    "package": "wgpu",
+    "version": "0.31.0",
+    "notices": [
+      "wgpu\\wgpu-0.31.0.dist-info\\licenses\\LICENSE"
+    ]
+  },
+  {
+    "package": "cffi",
+    "version": "2.1.1",
+    "notices": [
+      "cffi\\cffi-2.1.1.dist-info\\licenses\\LICENSE"
+    ]
+  },
+  {
+    "package": "pycparser",
+    "version": "3.0",
+    "notices": [
+      "pycparser\\pycparser-3.0.dist-info\\licenses\\LICENSE"
     ]
   }
 ]

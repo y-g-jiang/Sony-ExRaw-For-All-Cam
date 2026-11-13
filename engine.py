@@ -133,30 +133,27 @@ def packed(raw,meta,noise):
 def session():
     global _session
     if _session is None:
-        import onnx,onnxruntime as ort
-        data=MODEL.read_bytes()
-        if hashlib.sha256(data).hexdigest()!=MODEL_SHA:raise ValueError('模型校验不符，请恢复已验证的 v3.48 权重。')
-        model=onnx.load_model_from_string(data[:-2])
-        for v in model.graph.input:
-            v.type.tensor_type.shape.dim[2].dim_value=512;v.type.tensor_type.shape.dim[3].dim_value=512
-        for v in model.graph.output:
-            v.type.tensor_type.shape.dim[2].dim_value=2048;v.type.tensor_type.shape.dim[3].dim_value=2048
-        opts=ort.SessionOptions();opts.intra_op_num_threads=4;opts.inter_op_num_threads=1;opts.log_severity_level=3
-        _session=ort.InferenceSession(model.SerializeToString(),sess_options=opts,providers=['CPUExecutionProvider'])
+        from wgpu_model import WGPUModel
+        _session=WGPUModel(MODEL)
     return _session
 
+def backend_info():
+    return _session.report() if _session is not None else dict(provider='WGPU',strict=True,cpu_fallback=False,status='not_initialized')
+
+
 def infer(raw,meta,noise,floatpath,progress,cancel):
-    x,flips=packed(raw,meta,noise);_,h,w=x.shape;core=288;halo=112
+    progress('初始化 WGPU',0,1);s=session();tile=s.tile;halo=112;core=tile-2*halo
+    x,flips=packed(raw,meta,noise);_,h,w=x.shape
     ph=math.ceil(h/core)*core;pw=math.ceil(w/core)*core
     pad=np.pad(x,((0,0),(halo,halo+ph-h),(halo,halo+pw-w)),mode='reflect');del x
-    progress('正在加载模型',0,1);s=session();name=s.get_inputs()[0].name
+    progress('WGPU 已就绪',0,1)
     shape=(h*4,w*4,3);out=np.memmap(floatpath,dtype='float32',mode='w+',shape=shape)
     try:
         total=math.ceil(h/core)*math.ceil(w/core);n=0
         for y in range(0,h,core):
             for xx in range(0,w,core):
                 check_cancel(cancel);progress('超分处理中',n,total)
-                z=s.run(None,{name:pad[:,y:y+512,xx:xx+512][None].copy()})[0][0]
+                z=s.forward(pad[:,y:y+tile,xx:xx+tile].copy())
                 check_cancel(cancel)
                 ch=min(core,h-y);cw=min(core,w-xx)
                 out[y*4:(y+ch)*4,xx*4:(xx+cw)*4]=z[:,halo*4:halo*4+ch*4,halo*4:halo*4+cw*4].transpose(1,2,0)
@@ -185,7 +182,7 @@ def write_dng(path,pixels,meta,pedestal,baseline,thumb):
     rawtags=[(50714,'2I',3,rat([pedestal]*3),False),(50717,'I',3,(65535,)*3,False),
         (50719,'I',2,tuple(crop[:2]),False),(50720,'I',2,tuple(crop[2:]),False),(274,'H',1,orientation,False)]
     with tifffile.TiffWriter(path,bigtiff=(h*w*6>3_900_000_000)) as t:
-        t.write(thumb,photometric='rgb',subfiletype=1,subifds=1,metadata=None,software='Sony ExRAW Studio 1.0',extratags=tags)
+        t.write(thumb,photometric='rgb',subfiletype=1,subifds=1,metadata=None,software='Sony ExRAW Studio 1.1.0 WGPU',extratags=tags)
         t.write(pixels,photometric=34892,planarconfig='contig',rowsperstrip=128,subfiletype=0,metadata=None,extratags=rawtags)
 
 def encode_export(rgb,meta,kind,target,scratch,progress,cancel):
@@ -278,8 +275,8 @@ def process(path,settings,scratch,target,mode,progress,cancel,center=(.5,.5)):
         report=dict(source=meta,source_sha256=sha(path),model_sha256=MODEL_SHA,noise=noise,
             mode=mode,roi_native=roi,preview_outer_native=outer,output=str(target) if target else None,
             output_sha256=sha(target) if target else None,output_shape=list(rgb.shape),export=export,
-            seconds=time.perf_counter()-start,provider='CPUExecutionProvider',threads=4,
-            tiling=dict(packed_tile=512,halo=112,core=288),display_exposure_ev=2)
+            seconds=time.perf_counter()-start,provider='WGPU',backend=backend_info(),
+            tiling=dict(packed_tile=session().tile,halo=112,core=session().tile-224),display_exposure_ev=2)
         if target:target.with_suffix(target.suffix+'.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf8')
         return report
     finally:

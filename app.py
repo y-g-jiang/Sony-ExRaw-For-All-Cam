@@ -28,7 +28,7 @@ def public_task(t):return {k:v for k,v in t.items() if k not in ('cancel','setti
 def state():
     with LOCK:
         return dict(files=list(FILES.values()),jobs=[public_task(t) for t in TASKS.values()],active=ACTIVE,
-            output_default=str(OUT),model='Sony ExRAW Hi-Res v3.48',provider='CPU · 4 线程',
+            output_default=str(OUT),model='Sony ExRAW Hi-Res v3.48',provider='WGPU · 严格 GPU 推理',backend=engine.backend_info(),
             profile={k:engine.S5[k] for k in ('alpha','beta_total','c')},
             free_gib=round(shutil.disk_usage(ROOT).free/2**30,1))
 

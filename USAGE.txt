@@ -1,7 +1,7 @@
-Sony ExRAW Studio 1.0.0 — Windows x64
+Sony ExRAW Studio 1.1.0 — Windows x64
 
 Executable
-Double-click SonyExRAWStudio-v1.0.0-Windows-x64.exe. No Python installation or model
+Double-click SonyExRAWStudio-v1.1.0-Windows-x64.exe. No Python installation or model
 download is required: the original v3.48 ONNX weights are inside the executable.
 The interface opens in your default browser and processes images only on localhost.
 One-file extraction uses the current working directory and is removed on normal exit.
@@ -29,13 +29,19 @@ Formats
   Existing images are never overwritten. Large temporary buffers are reclaimed.
 
 Support
-CPU inference, four threads. Ordinary 2x2 Bayer with valid camera WB/matrix;
+Strict WGPU hardware inference: FP32 WGSL convolutions, transposed convolutions,
+ReLU and residual additions. No ONNX Runtime, PyTorch or CPU inference fallback.
+A hardware WGPU adapter and working graphics driver are required. The UI reports
+the actual adapter and graphics backend after initialization. RAW decode,
+PTC preparation and file encoding use the host; the neural graph executes on GPU.
+Ordinary 2x2 Bayer with valid camera WB/matrix;
 no X-Trans, monochrome or demosaiced RGB input. Per-file LibRaw black/white levels
 are read, not camera constants. Display uses a single-matrix preview, not Adobe looks.
 
 Source
 Install requirements.txt in Python 3.10 x64 and run: python -B main.py
-The model is already in models/. No local machine-specific JSR or PTC paths are used.
+The model is already in models/. ONNX only parses its tensor/graph data. Numerical
+network operations all run through wgpu-native. No local JSR/PTC paths are used.
 Set SONY_EXRAW_HOME to place writable application data elsewhere.
 Optional SONY_EXRAW_ALLOWED_DRIVES=E,F restricts output drives, including junctions.
 
